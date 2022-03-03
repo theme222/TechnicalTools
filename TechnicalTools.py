@@ -1,5 +1,4 @@
 """
-/Users/song/PycharmProjects/TechnicalTools/TechnicalTools.py
 This is the Technical tools python library created for general purpose shit
 just so you know I have no idea what half of this means so don't ask
 """
