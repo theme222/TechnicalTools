@@ -42,12 +42,3 @@ class TextFile:
             open(filename_new, 'x').write(finishedtext)
         except FileExistsError:
             log('error', 'Created file already exists', filename_new)
-
-
-def main():
-    TextFile.delnewline('words.txt', 4)
-    log('debug', 'not critical just epic')
-
-
-if __name__ == '__main__':
-    main()
