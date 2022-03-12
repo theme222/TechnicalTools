@@ -7,9 +7,7 @@ from inspect import currentframe, getframeinfo
 
 
 def log(logtype, message, var=None):
-    """
-    like the logging import but actually useful and less ugly
-    """
+    """ like the logging import but actually useful and less ugly and very colorful """
     linenumber = currentframe().f_back.f_lineno
     filename = getframeinfo(currentframe().f_back).filename.split('/')[-1]
     if logtype == 'info':
@@ -29,7 +27,7 @@ class TextFile:
         pass
 
     def __repr__(self):
-        return ''
+        return 'Why would you do this?'
 
     @staticmethod
     def delnewline(filename, char_amount):
@@ -42,3 +40,23 @@ class TextFile:
             open(filename_new, 'x').write(finishedtext)
         except FileExistsError:
             log('error', 'Created file already exists', filename_new)
+
+    @staticmethod
+    def replaceword(filename,word,replacement=''):
+        """finds the word and replaces with another thing"""
+        finishedtext = ''
+        for line in open(filename, 'r'):
+            finishedtext += line.replace(word,replacement)
+        filename_new = filename.split('.')[0] + '_new.txt'
+        try:
+            open(filename_new, 'x').write(finishedtext)
+        except FileExistsError:
+            log('error', 'Created file already exists', filename_new)
+
+
+def main():
+    log('debug', 'not critical just epic')
+
+
+if __name__ == '__main__':
+    main()
