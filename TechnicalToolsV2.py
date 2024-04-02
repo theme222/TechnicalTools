@@ -35,7 +35,7 @@ def log(message, logtitle="info", var=None, color="blue"):
         color = color_codes[color]
     except KeyError:
         log("Color not found", logtitle="error", color="red")
-        color = "cyan"
+        color = 36
 
     filenametxt = ""
     linenumbertxt = ""
