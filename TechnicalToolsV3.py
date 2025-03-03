@@ -3,7 +3,7 @@ This is the Technical tools python library created for general purpose stuff
 just so you know I have no idea what half of this means so don't ask
 """
 
-from random import randint,choice
+from random import randint, choice
 from inspect import currentframe, getframeinfo
 import fractions
 import os
@@ -38,26 +38,30 @@ class LogConfig:
         "error": ["ERROR", "lred"],
         "warning": ["WARNING", "lyellow"],
         "success": ["SUCCESS", "lgreen"],
+        "result": ["RESULT", "magenta"],
     }
 
     @classmethod
     def add_config(cls, mode, logtitle, color):
         if color not in cls.color_codes:
-            log("Color not found", mode="error")
-            raise Exception("Yo mama exception")
+            log("Color not found in config.", mode="error")
 
         cls.mode_to_config[mode] = [logtitle, color]
 
-
-    def __init__(self,mode):
-        mode_info = self.mode_to_config[mode]
+    def __init__(self, mode):
+        if mode in self.mode_to_config:
+            mode_info = self.mode_to_config[mode]
+        else:
+            log("Specified mode not in config, defaulting to info.", mode="warning")
+            mode_info = self.mode_to_config["info"]
         self.logtitle = mode_info[0]
         self.color = mode_info[1]
 
 
-def log(message:str, mode:str="" ,  var:any=None, logtitle:str="info", color:str="blue"):
+def log(message: str = "", mode: str = "", var: any = None, logtitle: str = "info", color: str = "blue", include_var_formatting: bool = True):
     """
     Printing but with color!
+    :param include_var_formatting:
     :param message:
     :param mode:
     :param var:
@@ -76,8 +80,10 @@ def log(message:str, mode:str="" ,  var:any=None, logtitle:str="info", color:str
         var = ""
     elif isinstance(var, dict) or isinstance(var, list) or isinstance(var, tuple):
         var = str(var)
-    else:
+    elif include_var_formatting:
         var = '|' + str(var) + '|'
+    else:
+        var = '\n' + str(var)
 
     try:
         color = LogConfig.color_codes[color]
@@ -88,6 +94,7 @@ def log(message:str, mode:str="" ,  var:any=None, logtitle:str="info", color:str
     filename_txt = ""
     linenumber_txt = ""
     logtitle_txt = ""
+    dash_txt = " - "
     null_escape = '\033[0m'
     color_escape = f"\033[0;{color}m"
 
@@ -105,7 +112,10 @@ def log(message:str, mode:str="" ,  var:any=None, logtitle:str="info", color:str
     if logtitle:
         logtitle_txt = f"\033[1;{color}m[{logtitle.upper()}]{color_escape}"
 
-    print_message = f'{logtitle_txt}{filename_txt}{linenumber_txt} - {message} {var}{null_escape}'
+    if not message:
+        dash_txt = ""
+
+    print_message = f'{logtitle_txt}{filename_txt}{linenumber_txt}{dash_txt}{message} {var}{null_escape}'
     print(print_message)
 
 
@@ -215,14 +225,17 @@ def multi_delete(arr, indexes):
         del arr[index]
     return arr
 
+
 class CNumber:
     """
     CNumber -> Cached number.
     """
+
     # +5-3*67**1/2+9/45 -> float
 
     def __init__(self, val):
         raise NotImplementedError
 
+
 if __name__ == '__main__':
-    log("Completed in",mode="info",var=time_convert(1002004))
+    log("Completed in", mode="success", var=time_convert(1002004))
